@@ -9,9 +9,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script src="theme.js"></script>
 </head>
 <body>
+<div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
 
 <!-- SHOP VIEW -->
 <div id="shopView">
@@ -41,7 +43,7 @@
   </header>
   <main class="panel">
     <h2>What should I print next?</h2>
-    <p>Got a model you'd love to see in the shop? Tell me about it.</p>
+    <p>Got a model you'd love to see in the shop? Tell me about it. (Limit: 2 suggestions per day.)</p>
     <form id="suggestForm" class="stack">
       <label>Model name or idea <input id="sTitle" required maxlength="120"></label>
       <label>Link (optional) <input id="sLink" type="url" maxlength="500" placeholder="https://..."></label>
@@ -72,13 +74,17 @@
       <label>Description <textarea id="pDesc" rows="3" maxlength="400"></textarea></label>
       <label>Price (USD) <input id="pPrice" type="number" min="0" step="0.01" required inputmode="decimal"></label>
       <label>Colors available (separate with commas) <input id="pColors" maxlength="120" placeholder="Red, Blue, Black"></label>
-      <label>Picture <input id="pImg" type="file" accept="image/*" required></label>
+      <label>Pictures (you can pick several) <input id="pImg" type="file" accept="image/*" multiple required></label>
+      <label>3D model, optional (.stl or .glb, ideally under 20 MB) <input id="pModel" type="file" accept=".stl,.glb"></label>
       <button class="btn solid" id="addBtn">Add product</button>
       <p class="msg" id="addMsg"></p>
     </form>
 
     <h2>Requests</h2>
     <div id="requests" class="list"></div>
+
+    <h2>Reviews</h2>
+    <div id="myReviews" class="list"></div>
 
     <h2>Suggestions</h2>
     <div id="suggestions" class="list"></div>
@@ -87,6 +93,44 @@
     <div id="myProducts" class="list"></div>
   </main>
 </div>
+
+<!-- Product detail dialog -->
+<dialog id="prodDialog" class="wide">
+  <button class="btn close" data-close aria-label="Close">&times;</button>
+  <div class="detail">
+    <div>
+      <div class="stage" id="stage"></div>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <div class="info">
+      <h3 id="dName"></h3>
+      <div id="dRating"></div>
+      <p id="dDesc"></p>
+      <span class="colors" id="dColors"></span>
+      <span class="price" id="dPrice"></span>
+      <button class="btn solid" id="dRequest">Request this print</button>
+      <h4>Reviews</h4>
+      <p class="hint">Reviews come from verified buyers only. Bought this? Use the review link in your delivery email.</p>
+      <div id="dReviews" class="list"></div>
+    </div>
+  </div>
+</dialog>
+
+<!-- Review dialog (opened from the emailed link) -->
+<dialog id="revDialog">
+  <form id="revForm" class="stack">
+    <h3 id="revTitle">Review</h3>
+    <p class="hint" id="revHint"></p>
+    <div id="revFields" class="stack">
+      <div class="starpick" id="starPick" role="group" aria-label="Rating"></div>
+      <label>Your name <input id="rName" required maxlength="60"></label>
+      <label>Your review (optional) <textarea id="rBody" rows="4" maxlength="1000"></textarea></label>
+      <button class="btn solid" id="rBtn">Post review</button>
+    </div>
+    <button type="button" class="btn outline" data-close>Close</button>
+    <p class="msg" id="rMsg"></p>
+  </form>
+</dialog>
 
 <!-- Request dialog -->
 <dialog id="reqDialog">
@@ -122,5 +166,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script type="module" src="viewer.js"></script>
 </body>
 </html>

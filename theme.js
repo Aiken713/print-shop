@@ -11,6 +11,12 @@
     { id: 'original', name: 'Original (Blue & Cream)',    paper: '#F5E4D0', ink: '#285CCC', hover: '#1F49A3', field: '#FFF8EF', fieldInk: '#12306E', soft: '#E7D2B9', backdrop: 'rgba(40,92,204,.75)' }
   ];
 
+  function lum(h) {
+    var n = parseInt(h.slice(1), 16);
+    var c = [n >> 16 & 255, n >> 8 & 255, n & 255].map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  }
+
   function find(id) {
     return THEMES.filter(function (t) { return t.id === id; })[0] || THEMES[THEMES.length - 1];
   }
@@ -24,6 +30,7 @@
     s.setProperty('--field-ink', t.fieldInk);
     s.setProperty('--soft', t.soft);
     s.setProperty('--backdrop', t.backdrop);
+    s.setProperty('--tint', lum(t.paper) > lum(t.ink) ? 'rgba(0,0,0,.22)' : 'rgba(255,255,255,.2)');
     var m = document.querySelector('meta[name="theme-color"]');
     if (m) m.setAttribute('content', t.ink);
   }
