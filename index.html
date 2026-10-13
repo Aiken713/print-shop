@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#285CCC">
+<title>3D Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="theme.js"></script>
+</head>
+<body>
+
+<!-- SHOP VIEW -->
+<div id="shopView">
+  <header class="top">
+    <span class="brand" id="brand">3D PRINTS</span>
+    <span class="row">
+      <button id="suggestBtn" class="btn outline">Suggest a model</button>
+      <button id="creatorBtn" class="btn outline">Creator page</button>
+    </span>
+  </header>
+
+  <section class="hero">
+    <h1>PRINTS</h1>
+    <p>Pick a print and send a request. I'll email you to confirm.</p>
+  </section>
+
+  <section class="shelf">
+    <div id="grid" class="grid"></div>
+  </section>
+</div>
+
+<!-- SUGGEST VIEW -->
+<div id="suggestView" hidden>
+  <header class="top">
+    <span class="brand">3D PRINTS</span>
+    <button id="suggestBack" class="btn outline">Back to shop</button>
+  </header>
+  <main class="panel">
+    <h2>What should I print next?</h2>
+    <p>Got a model you'd love to see in the shop? Tell me about it.</p>
+    <form id="suggestForm" class="stack">
+      <label>Model name or idea <input id="sTitle" required maxlength="120"></label>
+      <label>Link (optional) <input id="sLink" type="url" maxlength="500" placeholder="https://..."></label>
+      <label>Details (optional) <textarea id="sDetails" rows="4" maxlength="1000"></textarea></label>
+      <label>Your name (optional) <input id="sName" maxlength="80" autocomplete="name"></label>
+      <label>Your email (optional, so I can tell you when it's added) <input id="sEmail" type="email" maxlength="120" autocomplete="email"></label>
+      <input id="sWebsite" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn solid" id="sBtn">Send suggestion</button>
+      <p class="msg" id="sMsg"></p>
+    </form>
+  </main>
+</div>
+
+<!-- CREATOR VIEW -->
+<div id="creatorView" hidden>
+  <header class="top">
+    <span class="brand">CREATOR</span>
+    <span class="row">
+      <button id="viewShop" class="btn outline">View shop</button>
+      <button id="logout" class="btn outline">Log out</button>
+    </span>
+  </header>
+
+  <main class="panel">
+    <h2>Add a product</h2>
+    <form id="addForm" class="stack">
+      <label>Name <input id="pName" required maxlength="80"></label>
+      <label>Description <textarea id="pDesc" rows="3" maxlength="400"></textarea></label>
+      <label>Price (USD) <input id="pPrice" type="number" min="0" step="0.01" required inputmode="decimal"></label>
+      <label>Colors available (separate with commas) <input id="pColors" maxlength="120" placeholder="Red, Blue, Black"></label>
+      <label>Picture <input id="pImg" type="file" accept="image/*" required></label>
+      <button class="btn solid" id="addBtn">Add product</button>
+      <p class="msg" id="addMsg"></p>
+    </form>
+
+    <h2>Requests</h2>
+    <div id="requests" class="list"></div>
+
+    <h2>Suggestions</h2>
+    <div id="suggestions" class="list"></div>
+
+    <h2>Your products</h2>
+    <div id="myProducts" class="list"></div>
+  </main>
+</div>
+
+<!-- Request dialog -->
+<dialog id="reqDialog">
+  <form id="reqForm" class="stack">
+    <h3 id="reqTitle">Request</h3>
+    <label>Your name <input id="cName" required maxlength="80" autocomplete="name"></label>
+    <label>Your email <input id="cEmail" type="email" required autocomplete="email"></label>
+    <label id="colorWrap" hidden>Color <select id="cColor"></select></label>
+    <label>Notes (optional) <textarea id="cNotes" rows="3" maxlength="500" placeholder="Anything I should know? Size, a name to add, etc."></textarea></label>
+    <fieldset class="pay">
+      <legend>How will you pay?</legend>
+      <label class="opt"><input type="radio" name="pay" value="online" checked> Online (card or app)</label>
+      <label class="opt"><input type="radio" name="pay" value="cash"> Cash, in person</label>
+    </fieldset>
+    <button class="btn solid" id="reqBtn">Send request</button>
+    <button type="button" class="btn outline" data-close>Cancel</button>
+    <p class="msg" id="reqMsg"></p>
+  </form>
+</dialog>
+
+<!-- Creator code dialog -->
+<dialog id="codeDialog">
+  <form id="codeForm" class="stack">
+    <h3>Creator code</h3>
+    <label>Enter your code <input id="code" type="password" required autocomplete="current-password"></label>
+    <button class="btn solid">Enter</button>
+    <button type="button" class="btn outline" data-close>Cancel</button>
+    <p class="msg" id="codeMsg"></p>
+  </form>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
